@@ -16,7 +16,7 @@ builder.Services.AddOpenApi(); // .NET 9 OpenAPI
 //     builder.Configuration.AddAzureKeyVault(keyVaultUrl, new DefaultAzureCredential());
 // }
 
-// Vi använder InMemory-databas lokalt
+// Vi använder InMemory-databas lokalt hello
 builder.Services.AddDbContext<InventoryDbContext>(options =>
     options.UseInMemoryDatabase("InventoryDb"));
 
