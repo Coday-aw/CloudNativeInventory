@@ -7,7 +7,7 @@ on:
 
 env:
   AZURE_CONTAINER_REGISTRY: cloudNativeInventory
-  CONTAINER_APP_NAME: cloudNativeInventory
+  CONTAINER_APP_NAME: cloudnativeinventory
   RESOURCE_GROUP: chasAcademy
 
 jobs:
