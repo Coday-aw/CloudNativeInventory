@@ -26,11 +26,6 @@ Not included: Kubernetes, VM hosting, major code rewrites.
    Cons: Not aligned with container workflows
    Rejected: Lacks parity and flexibility needed for future scaling.
 
-### - Azure Kubernetes Service
-   Pros: Maximum control and flexibility
-   Cons: High complexity, requires deep expertise
-   Rejected: Overkill for project scope.
-
 - Azure Container Apps (chosen)
    Pros: Managed, scalable, container‑native, Key Vault integration
    Cons: Less control than AKS
