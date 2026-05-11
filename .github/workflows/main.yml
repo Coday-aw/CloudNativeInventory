@@ -1,11 +1,11 @@
 name: Inventory CI Pipeline
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
   push:
     branches: [ main ]
 
-env: 
+env:
   AZURE_CONTAINER_REGISTRY: cloudNativeInventory
   CONTAINER_APP_NAME: cloudNativeInventory
   RESOURCE_GROUP: chasAcademy
@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-      
+
       - name: Restore dependencies
         run: dotnet restore CloudNativeInventory.sln
 
@@ -31,40 +31,39 @@ jobs:
 
       - name: Run tests
         run: dotnet test CloudNativeInventory.sln --configuration Release --no-build --verbosity normal
-  
+
   docker-build-and-deploy:
+    needs: build-and-test
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: checkout code
-        uses: actions/checkout
-      
-      - name: login in to ACR
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to ACR
         uses: docker/login-action@v3
         with:
           registry: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
           username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
           password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
-          
+
       - name: Build and push container image to ACR
         uses: docker/build-push-action@v6
-        with: 
+        with:
           push: true
-          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${ env.CONTAINER_APP_NAME }}:${{ github.sha }}
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
           file: CloudNativeInventory.Api/Dockerfile
-          
+
       - name: Azure Login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-            
+
       - name: Deploy to Azure Container Apps
         uses: azure/container-apps-deploy-action@v1
-        with: 
+        with:
           imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
           resourceGroup: ${{ env.RESOURCE_GROUP }}
           containerAppName: ${{ env.CONTAINER_APP_NAME }}
-          environmentVariables: | 
+          environmentVariables: |
             ASPNETCORE_ENVIRONMENT=Development
-          
-        
