@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  AZURE_CONTAINER_REGISTRY: cloudNativeInventory
+  AZURE_CONTAINER_REGISTRY: clouddevinventory
   CONTAINER_APP_NAME: cloudnativeinventory
   RESOURCE_GROUP: chasAcademy
 
@@ -51,7 +51,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
+          tags: |
+            ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
+            ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:latest
           file: CloudNativeInventory.Api/Dockerfile
 
       - name: Azure Login
