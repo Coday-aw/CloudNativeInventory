@@ -8,7 +8,7 @@ on:
 env:
   AZURE_CONTAINER_REGISTRY: clouddevinventory
   CONTAINER_APP_NAME: cloudnativeinventory
-  RESOURCE_GROUP: chasAcademy
+  RESOURCE_GROUP: chasdev
 
 jobs:
   build-and-test:
